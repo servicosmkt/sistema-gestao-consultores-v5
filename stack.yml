@@ -1,0 +1,46 @@
+version: "3.7"
+
+services:
+  api_gestao_consultores:
+    image: servicosia/gestao-consultores:5.0.0
+    networks:
+      - network_public
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USERNAME=postgres
+      - POSTGRES_PASSWORD=i8VYg0PAxUWD1HOgImH3
+      - POSTGRES_DATABASE=gestao_consultores
+      - AUTHENTICATION_API_KEY=429683C4C977415CAAFCCE10F7D57E11
+      - ENVIRONMENT=production
+      - API_URL=https://api.automacoesmkt.com.br
+    ports:
+      - "8000:8000"
+    volumes:
+      - api_gestao_consultores:/app/data
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints:
+          - node.hostname == automacoesmkt-mananger
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 512M
+      labels:
+        - traefik.enable=true
+        - traefik.http.routers.gestao-consultores.rule=Host(`api.automacoesmkt.com.br`)
+        - traefik.http.routers.gestao-consultores.entrypoints=websecure
+        - traefik.http.routers.gestao-consultores.tls.certresolver=letsencryptresolver
+        - traefik.http.services.gestao-consultores.loadBalancer.server.port=8000
+
+networks:
+  network_public:
+    name: network_public
+    external: true
+
+volumes:
+  api_gestao_consultores:
+    external: true
+    name: api_gestao_consultores
