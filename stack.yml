@@ -9,11 +9,11 @@ services:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - POSTGRES_USERNAME=postgres
-      - POSTGRES_PASSWORD=i8VYg0PAxUWD1HOgImH3
+      - POSTGRES_PASSWORD=[SUA SENHA POSTGRES]
       - POSTGRES_DATABASE=gestao_consultores
-      - AUTHENTICATION_API_KEY=429683C4C977415CAAFCCE10F7D57E11
+      - AUTHENTICATION_API_KEY=[SUA CHAVE API]
       - ENVIRONMENT=production
-      - API_URL=https://api.automacoesmkt.com.br
+      - API_URL=[SUA URL API]
     ports:
       - "8000:8000"
     volumes:
@@ -23,14 +23,14 @@ services:
       replicas: 2
       placement:
         constraints:
-          - node.hostname == automacoesmkt-mananger
+          - node.hostname == [SEU HOSTNAME]
       resources:
         limits:
           cpus: "0.5"
           memory: 512M
       labels:
         - traefik.enable=true
-        - traefik.http.routers.gestao-consultores.rule=Host(`api.automacoesmkt.com.br`)
+        - traefik.http.routers.gestao-consultores.rule=Host(`[SEU DOMINIO]`)
         - traefik.http.routers.gestao-consultores.entrypoints=websecure
         - traefik.http.routers.gestao-consultores.tls.certresolver=letsencryptresolver
         - traefik.http.services.gestao-consultores.loadBalancer.server.port=8000
