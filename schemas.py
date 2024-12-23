@@ -5,6 +5,7 @@ from datetime import datetime
 class ConsultorBase(BaseModel):
     nome: str
     email: str
+    telefone: Optional[str] = None
     idiomas: List[str]
     status_ativo: bool = True
     status_ativo_sequencial: bool = True
@@ -17,6 +18,7 @@ class ConsultorCreate(ConsultorBase):
 class ConsultorUpdate(BaseModel):
     nome: Optional[str] = None
     email: Optional[str] = None
+    telefone: Optional[str] = None
     idiomas: Optional[List[str]] = None
     status_ativo: Optional[bool] = None
     status_ativo_sequencial: Optional[bool] = None
@@ -34,6 +36,7 @@ class ConsultorDaVezResponse(BaseModel):
     consultor_id: int
     consultor_nome: str
     consultor_email: str
+    consultor_telefone: Optional[str] = None
     consultor_idiomas: List[str]
     consultor_status_online: bool
     consultor_atendimento_iso: str

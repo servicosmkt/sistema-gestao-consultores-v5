@@ -58,6 +58,7 @@ def upgrade():
                 id SERIAL PRIMARY KEY,
                 nome VARCHAR(255) NOT NULL,
                 email VARCHAR(255) UNIQUE,
+                telefone VARCHAR(255),
                 idiomas VARCHAR[] NOT NULL,
                 status_ativo BOOLEAN DEFAULT true,
                 status_ativo_sequencial BOOLEAN DEFAULT true,
@@ -115,8 +116,8 @@ def upgrade():
         # 4. Adiciona um consultor de teste
         print("Adicionando consultor de teste...")
         connection.execute(text("""
-            INSERT INTO consultores (nome, email, idiomas, status_ativo, status_ativo_sequencial, status_online)
-            VALUES ('Consultor Teste', 'teste@exemplo.com', ARRAY['pt', 'en'], true, true, true)
+            INSERT INTO consultores (nome, email, telefone, idiomas, status_ativo, status_ativo_sequencial, status_online)
+            VALUES ('Consultor Teste', 'teste@exemplo.com', '+55 11 99999-9999', ARRAY['pt', 'en'], true, true, true)
             ON CONFLICT (email) DO NOTHING;
         """))
 
