@@ -85,7 +85,15 @@ def upgrade():
                 ON CONFLICT (key) DO NOTHING;
             """), {"key": api_key})
         
-        # 4. Inicializa o controle de protocolo se necessário
+        # 4. Adiciona um consultor de teste
+        print("Adicionando consultor de teste...")
+        connection.execute(text("""
+            INSERT INTO consultores (nome, email, idiomas, status_ativo, status_ativo_sequencial, status_online)
+            VALUES ('Consultor Teste', 'teste@exemplo.com', ARRAY['pt', 'en'], true, true, true)
+            ON CONFLICT (email) DO NOTHING;
+        """))
+
+        # 5. Inicializa o controle de protocolo se necessário
         print("Inicializando controle de protocolo...")
         connection.execute(text("""
             INSERT INTO controle_protocolo (ultimo_numero, updated_at)
