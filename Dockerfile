@@ -24,8 +24,8 @@ if [ -f "/run/secrets/api_key" ]; then\n\
     export AUTHENTICATION_API_KEY=$(cat /run/secrets/api_key)\n\
 fi\n\
 \n\
-# Executa as migrações\n\
-python migrations/tabela_bd.py\n\
+# Executa a migração\n\
+python migrations/setup_database.py\n\
 \n\
 # Inicia a aplicação\n\
 exec uvicorn main:app --host 0.0.0.0 --port 8000\n\

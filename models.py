@@ -47,6 +47,7 @@ class Consultor(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     nome = Column(String, index=True)
+    email = Column(String, unique=True, index=True)
     idiomas = Column(ARRAY(String))
     status_ativo = Column(Boolean, default=True)
     status_ativo_sequencial = Column(Boolean, default=True)
@@ -142,6 +143,7 @@ def criar_consultor(db: Session, consultor: schemas.ConsultorCreate) -> Consulto
         agora = datetime.now(timezone.utc)
         db_consultor = Consultor(
             nome=consultor.nome,
+            email=consultor.email,
             idiomas=consultor.idiomas,
             status_ativo=consultor.status_ativo,
             status_ativo_sequencial=consultor.status_ativo_sequencial,
@@ -208,6 +210,7 @@ def get_consultor_da_vez(db: Session, idioma: str) -> schemas.ConsultorDaVezResp
             SELECT 
                 id,
                 nome,
+                email,
                 idiomas,
                 status_online,
                 id_pipedrive
@@ -231,6 +234,7 @@ def get_consultor_da_vez(db: Session, idioma: str) -> schemas.ConsultorDaVezResp
                 c.ultimo_atendimento as timestamp_atendimento,
                 cs.id,
                 cs.nome,
+                cs.email,
                 cs.idiomas,
                 cs.status_online,
                 cs.id_pipedrive
@@ -238,6 +242,7 @@ def get_consultor_da_vez(db: Session, idioma: str) -> schemas.ConsultorDaVezResp
         SELECT 
             id,
             nome,
+            email,
             idiomas,
             status_online,
             timestamp_atendimento,
@@ -261,6 +266,7 @@ def get_consultor_da_vez(db: Session, idioma: str) -> schemas.ConsultorDaVezResp
         response = schemas.ConsultorDaVezResponse(
             consultor_id=result.id,
             consultor_nome=result.nome,
+            consultor_email=result.email,
             consultor_idiomas=result.idiomas,
             consultor_status_online=result.status_online,
             consultor_atendimento_iso=result.timestamp_atendimento.isoformat(),
@@ -272,6 +278,7 @@ def get_consultor_da_vez(db: Session, idioma: str) -> schemas.ConsultorDaVezResp
 [INFO] Consultor selecionado:
 - ID: {response.consultor_id}
 - Nome: {response.consultor_nome}
+- Email: {response.consultor_email}
 - Idiomas: {', '.join(response.consultor_idiomas)}
 - Status Online: {response.consultor_status_online}
 - Último Atendimento: {response.consultor_atendimento_iso}
