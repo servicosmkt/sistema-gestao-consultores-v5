@@ -19,9 +19,6 @@ if not API_KEY:
 # Configuração de segurança
 api_key_header = APIKeyHeader(name="api-key", description="API Key para autenticação")
 
-# Cria as tabelas no banco de dados
-Base.metadata.create_all(bind=engine)
-
 app = FastAPI(
     title="Sistema de Gestão de Consultores V6",
     version="6.0.0",
