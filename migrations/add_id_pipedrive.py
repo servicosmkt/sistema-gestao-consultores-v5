@@ -38,10 +38,10 @@ def run_migration():
                 CREATE TABLE consultores (
                     id SERIAL PRIMARY KEY,
                     nome VARCHAR NOT NULL,
-                    idiomas VARCHAR NOT NULL,
-                    ativo BOOLEAN DEFAULT TRUE,
-                    participando_distribuicao BOOLEAN DEFAULT TRUE,
-                    online BOOLEAN DEFAULT FALSE,
+                    idiomas VARCHAR[] NOT NULL,
+                    status_ativo BOOLEAN DEFAULT TRUE,
+                    status_ativo_sequencial BOOLEAN DEFAULT TRUE,
+                    status_online BOOLEAN DEFAULT FALSE,
                     ultimo_atendimento TIMESTAMP WITH TIME ZONE,
                     id_pipedrive INTEGER,
                     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -55,9 +55,9 @@ def run_migration():
         else:
             # Adiciona colunas se não existirem
             columns = [
-                ("ativo", "BOOLEAN DEFAULT TRUE"),
-                ("participando_distribuicao", "BOOLEAN DEFAULT TRUE"),
-                ("online", "BOOLEAN DEFAULT FALSE"),
+                ("status_ativo", "BOOLEAN DEFAULT TRUE"),
+                ("status_ativo_sequencial", "BOOLEAN DEFAULT TRUE"),
+                ("status_online", "BOOLEAN DEFAULT FALSE"),
                 ("ultimo_atendimento", "TIMESTAMP WITH TIME ZONE"),
                 ("id_pipedrive", "INTEGER"),
                 ("created_at", "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP"),
