@@ -12,8 +12,35 @@ POSTGRES_USERNAME = os.getenv("POSTGRES_USERNAME", "postgres")
 POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
 POSTGRES_DATABASE = os.getenv("POSTGRES_DATABASE", "gestao_consultores")
 
-# String de conexão
+# String de conexão para o postgres (sem banco de dados específico)
+POSTGRES_URL = f"postgresql://{POSTGRES_USERNAME}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/postgres"
+
+# String de conexão para o banco de dados específico
 DATABASE_URL = f"postgresql://{POSTGRES_USERNAME}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DATABASE}"
+
+def create_database():
+    """
+    Cria o banco de dados se ele não existir.
+    """
+    engine = create_engine(POSTGRES_URL)
+    
+    with engine.connect() as connection:
+        # Desativa o autocommit para poder executar CREATE DATABASE
+        connection.execute(text("COMMIT"))
+        
+        # Verifica se o banco existe
+        result = connection.execute(text(
+            "SELECT 1 FROM pg_database WHERE datname = :database"
+        ), {"database": POSTGRES_DATABASE})
+        
+        if not result.fetchone():
+            print(f"Criando banco de dados {POSTGRES_DATABASE}...")
+            # Precisa estar fora de uma transação para criar banco de dados
+            connection.execute(text("COMMIT"))
+            connection.execute(text(f"CREATE DATABASE {POSTGRES_DATABASE}"))
+            print("Banco de dados criado com sucesso!")
+        else:
+            print(f"Banco de dados {POSTGRES_DATABASE} já existe.")
 
 def upgrade():
     """
@@ -122,4 +149,5 @@ def downgrade():
         print("Todas as tabelas foram removidas com sucesso!")
 
 if __name__ == "__main__":
+    create_database()
     upgrade()
